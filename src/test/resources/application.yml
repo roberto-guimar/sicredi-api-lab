@@ -1,0 +1,15 @@
+integration:
+  dummyjson-get-api:
+    url: https://dummyjson.com/test
+  dummyjson-get-users-api:
+    url: https://dummyjson.com/users
+  dummyjson-post-auth-login-api:
+    url: https://dummyjson.com/auth/login
+  dummyjson-get-auth-products-api:
+    url: https://dummyjson.com/auth/products
+  dummyjson-post-products-add-api:
+    url: https://dummyjson.com/products/add
+  dummyjson-get-products-api:
+    url: https://dummyjson.com/products
+  dummyjson-get-products-id-api:
+    url: https://dummyjson.com/products
