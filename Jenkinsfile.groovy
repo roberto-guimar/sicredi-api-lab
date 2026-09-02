@@ -2,57 +2,62 @@ pipeline {
     agent any
 
     tools {
-        jdk 'jdk17'
+        jdk 'jdk21'
     }
 
     options {
-        timestamps()
         buildDiscarder(logRotator(numToKeepStr: '10'))
+        timestamps()
         disableConcurrentBuilds()
     }
 
-    environment {
-        GRADLE_OPTS = '-Dorg.gradle.daemon=false'
-    }
-
     stages {
-        stage('Checkout') {
+        stage('Check JDK') {
             steps {
-                checkout scm
+                bat 'java -version'
             }
         }
 
-        stage('Grant Gradle Wrapper Permission') {
+        stage('Build') {
             steps {
-                sh 'chmod +x ./gradlew'
+                bat 'gradlew.bat clean build -x test --no-daemon'
             }
         }
 
-        stage('Run Tests') {
+        stage('Test') {
             steps {
-                sh './gradlew test --no-daemon'
+                bat 'gradlew.bat test --no-daemon'
+            }
+            post {
+                always {
+                    junit testResults: '**/build/test-results/test/*.xml', allowEmptyResults: true
+                }
+            }
+        }
+
+        stage('Allure Report') {
+            steps {
+                bat 'gradlew.bat allureReport --no-daemon'
+            }
+            post {
+                always {
+                    allure includeProperties: false,
+                            jdk: '',
+                            results: [[path: 'build/allure-results']]
+                }
             }
         }
     }
 
     post {
-        always {
-            junit testResults: '**/build/test-results/test/*.xml', allowEmptyResults: true
-
-            publishHTML(target: [
-                    allowMissing: true,
-                    alwaysLinkToLastBuild: true,
-                    keepAll: true,
-                    reportDir: 'build/reports/tests/test',
-                    reportFiles: 'index.html',
-                    reportName: 'Gradle Test Report'
-            ])
-        }
         success {
-            echo 'Todos os testes passaram com sucesso!'
+            echo 'Build finalizado com sucesso!'
         }
         failure {
-            echo 'Falha na execução dos testes. Verifique o relatório JUnit.'
+            echo 'Build falhou. Verifique os logs.'
+        }
+        always {
+            cleanWs()
         }
     }
 }
