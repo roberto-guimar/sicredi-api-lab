@@ -14,13 +14,25 @@ repositories {
 
 java {
 	toolchain {
-		languageVersion = JavaLanguageVersion.of(21)
+		languageVersion = JavaLanguageVersion.of(17)
 	}
 }
 
 ext {
 	set('googleGuavaVersion', '33.0.0-jre')
 	set('restAssured', '5.4.0')
+	set('groovyVersion', '4.0.28')
+	set('jacksonDatabindVersion', '2.18.2')
+}
+
+dependencyManagement {
+	dependencies {
+		dependencySet(group: 'org.apache.groovy', version: "$groovyVersion") {
+			entry 'groovy'
+			entry 'groovy-json'
+			entry 'groovy-xml'
+		}
+	}
 }
 
 dependencies {
@@ -30,6 +42,9 @@ dependencies {
 
 	// --- Test
 	testImplementation('org.springframework.boot:spring-boot-starter-test')
+
+	// para o classpath de teste.
+	testImplementation("com.fasterxml.jackson.core:jackson-databind:$jacksonDatabindVersion")
 
 	// --- Google Guava
 	implementation("com.google.guava:guava:$googleGuavaVersion")

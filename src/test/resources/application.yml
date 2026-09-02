@@ -1,6 +1,6 @@
 integration:
   dummyjson-get-api:
-    url: https://dummyjson.com/test
+    url: https://dummyjson.com
   dummyjson-get-users-api:
     url: https://dummyjson.com/users
   dummyjson-post-auth-login-api:
