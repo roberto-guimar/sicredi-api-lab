@@ -12,7 +12,7 @@ public class GetDummyjsonDataProviderImpl implements GetDummyJsonStatusDataProvi
     private final static String ENDPOINT = "/test";
     private final RestAssuredService restAssuredService;
 
-    @Value("${integration.dummyjson-get-api.url}")
+    @Value("${integration.dummyjson-apis.url}")
     private String url;
 
     public GetDummyjsonDataProviderImpl(RestAssuredService restAssuredService) {

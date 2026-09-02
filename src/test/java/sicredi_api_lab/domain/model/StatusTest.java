@@ -13,7 +13,7 @@ public class StatusTest {
     }
 
     @JsonCreator
-    public StatusTest(String status) {
+    public StatusTest(String status, String method) {
         this.status = status;
         this.method = method;
     }
